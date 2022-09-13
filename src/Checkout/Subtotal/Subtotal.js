@@ -3,9 +3,9 @@ import styles from "./Subtotal.module.scss";
 
 const cx = classNames.bind(styles);
 
-function Subtotal({ products }) {
+function Subtotal({ baskets }) {
 
-  const total = products.reduce((result, prod) => 
+  const total = baskets.reduce((result, prod) => 
     result + prod.price, 
     0
   );
@@ -14,7 +14,7 @@ function Subtotal({ products }) {
   return (
     <div className={cx("wrapper")}>
       <p>
-        Subtotal ({products.length} items): <strong>${result}</strong>
+        Subtotal ({baskets.length} items): <strong>${result}</strong>
       </p>
       <small className={cx("gift")}>
         <input type="checkbox" />

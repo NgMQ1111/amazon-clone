@@ -1,19 +1,22 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 import classNames from "classnames/bind";
 import styles from "./Header.module.scss";
 
-import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import SearchTwoToneIcon from "@mui/icons-material/SearchTwoTone";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { useStateValue } from "../store/StateProvider";
 
 const cx = classNames.bind(styles);
 
 function Header() {
+  const [{ baskets }, dispath] = useStateValue();
+
   return (
     <div className={cx("wrapper")}>
-      <div className={cx('container')}>
-        <Link to="/" >
-          <div className={cx('wrap__logo')}>
+      <div className={cx("container")}>
+        <Link to="/">
+          <div className={cx("wrap__logo")}>
             <img
               className={cx("logo")}
               src="https://pngimg.com/uploads/amazon/amazon_PNG11.png"
@@ -21,33 +24,35 @@ function Header() {
             />
           </div>
         </Link>
-  
-        <div className={cx('search')}>
-          <input className={cx('search__input')} type="text"/>
-          <SearchTwoToneIcon className={cx('search__icon')}/>
+
+        <div className={cx("search")}>
+          <input className={cx("search__input")} type="text" />
+          <SearchTwoToneIcon className={cx("search__icon")} />
         </div>
-  
-        <div className={cx('navigation')}>
-          <div className={cx('option')}>
-            <span className={cx('optionLineOne')}>Hello Guest</span>
-            <span className={cx('optionLineTwo')}>Sign In</span>
+
+        <div className={cx("navigation")}>
+          <div className={cx("option")}>
+            <span className={cx("optionLineOne")}>Hello Guest</span>
+            <span className={cx("optionLineTwo")}>Sign In</span>
           </div>
-  
-          <div className={cx('option')}>
-            <span className={cx('optionLineOne')}>Returns</span>
-            <span className={cx('optionLineTwo')}>& Orders</span>
+
+          <div className={cx("option")}>
+            <span className={cx("optionLineOne")}>Returns</span>
+            <span className={cx("optionLineTwo")}>& Orders</span>
           </div>
-  
-          <div className={cx('option')}>
-            <span className={cx('optionLineOne')}>Your</span>
-            <span className={cx('optionLineTwo')}>Prime</span>
+
+          <div className={cx("option")}>
+            <span className={cx("optionLineOne")}>Your</span>
+            <span className={cx("optionLineTwo")}>Prime</span>
           </div>
-  
+
           <Link to="/checkout">
-            <div className={cx('optionCart')}>
-              <ShoppingCartIcon className={cx('cart__icon')}/>
-              <span className={cx('optionLineTwo')}>Cart</span>
-              <span className={cx('cart__count')}>0</span>
+            <div className={cx("optionCart")}>
+              <ShoppingCartIcon className={cx("cart__icon")} />
+              <div className={cx('notWrapIconCart')}>
+                <span className={cx("cart__count")}>{baskets.length}</span>
+                <span className={cx("optionLineTwo")}>Cart</span>
+              </div>
             </div>
           </Link>
         </div>

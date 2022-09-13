@@ -58,7 +58,7 @@ function App() {
             path="/checkout"
             element={
               <>
-                <Checkout products={PRODUCTS}/>
+                <Checkout />
               </>
             }
           />

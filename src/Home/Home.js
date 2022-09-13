@@ -1,10 +1,13 @@
 import classNames from "classnames/bind";
+import { useStateValue } from "../store/StateProvider";
 import styles from "./Home.module.scss";
 import Product from "./Product/Product";
 
 const cx = classNames.bind(styles);
 
 function Home({ products }) {
+
+  const [{baskets}, dispath] = useStateValue()
 
   return (
     <div className={cx("wrapper")}>
@@ -19,6 +22,7 @@ function Home({ products }) {
           {products.map((product) => (
             <Product
               key={product.id}
+              id={product.id}
               title={product.title}
               price={product.price}
               rating={product.rating}

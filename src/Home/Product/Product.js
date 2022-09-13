@@ -2,10 +2,26 @@ import classNames from "classnames/bind";
 import styles from "./Product.module.scss";
 
 import StarIcon from "@mui/icons-material/Star";
+import { useStateValue } from "../../store/StateProvider";
 
 const cx = classNames.bind(styles);
 
-function Product({ title, price, rating, image }) {
+function Product({id, title, price, rating, image }) {
+  
+  const [{baskets}, dispath] = useStateValue()
+
+  const addToBasket = () => {
+    dispath({
+      type: 'ADD_TO_BASKET',
+      item: {
+        id: id,
+        title: title,
+        price: price,
+        rating: rating,
+        image: image,
+      }
+    })
+  }
 
   return (
     <div className={cx("wrapper")}>
@@ -27,7 +43,7 @@ function Product({ title, price, rating, image }) {
       <img className={cx("image")} src={image} alt="" />
 
       <div className={cx("wrap-btn")}>
-        <button className={cx("add-btn")}>Add to basket</button>
+        <button onClick={addToBasket} className={cx("add-btn")}>Add to basket</button>
       </div>
     </div>
   );

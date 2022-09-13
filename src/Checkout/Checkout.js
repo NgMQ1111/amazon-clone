@@ -1,11 +1,23 @@
 import classNames from "classnames/bind";
+import { useEffect, useState } from "react";
+import { useStateValue } from "../store/StateProvider";
+
 import BasketItem from "./BasketItem/BasketItem";
 import styles from "./Checkout.module.scss";
 import Subtotal from "./Subtotal/Subtotal";
 
 const cx = classNames.bind(styles);
 
-function Checkout({ products }) {
+function Checkout() {
+  const [{ baskets }, dispath] = useStateValue();
+  const [isBasket, setIsBasket] = useState(false);
+
+  useEffect(() => {
+    if (baskets.length !== 0) {
+      setIsBasket(true);
+    }
+  }, [baskets]);
+
   return (
     <div className={cx("wrapper")}>
       <div className={cx("left")}>
@@ -16,23 +28,26 @@ function Checkout({ products }) {
         />
 
         <div className={cx("wrap__basketIitem")}>
-            <h2 className={cx("title")}>
-                Your shopping Basket
-            </h2>
-            {products.map((product) => (
-            <BasketItem
-              key={product.id}
-              title={product.title}
-              price={product.price}
-              rating={product.rating}
-              image={product.image}
-            />
-          ))}
+          <h2 className={cx("title")}>Your shopping Basket</h2>
+          {isBasket ? (
+            baskets.map((basket, index) => (
+              <BasketItem
+                index={index}
+                key={index}
+                title={basket.title}
+                price={basket.price}
+                rating={basket.rating}
+                image={basket.image}
+              />
+            ))
+          ) : (
+            <h1>You have nothing in your basket</h1>
+          )}
         </div>
       </div>
 
       <div className={cx("right")}>
-        <Subtotal products={products}/>
+        <Subtotal baskets={baskets} />
       </div>
     </div>
   );

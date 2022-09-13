@@ -2,10 +2,21 @@ import classNames from "classnames/bind";
 import styles from "./BasketItem.module.scss";
 
 import StarIcon from "@mui/icons-material/Star";
+import { useStateValue } from "../../store/StateProvider";
 
 const cx = classNames.bind(styles);
 
-function BasketItem({ title, price, rating, image }) {
+function BasketItem({index, title, price, rating, image }) {
+
+  const [{baskets}, dispath] = useStateValue()
+
+  const removeFromBasket = () => {
+    dispath({
+      type: "REMOVE_FROM_BASKET",
+      item: index
+    })
+  }
+
   return (
     <div className={cx("wrapper")}>
       <div className={cx("wrap-img")}>
@@ -27,7 +38,7 @@ function BasketItem({ title, price, rating, image }) {
         </div>
 
         <div className={cx("wrap-btn")}>
-          <button className={cx("remove-btn")}>Remove for basket</button>
+          <button onClick={removeFromBasket} className={cx("remove-btn")}>Remove for basket</button>
         </div>
       </div>
     </div>
