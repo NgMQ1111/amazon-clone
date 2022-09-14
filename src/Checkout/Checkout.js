@@ -10,11 +10,11 @@ const cx = classNames.bind(styles);
 
 function Checkout() {
   const [{ baskets }, dispath] = useStateValue();
-  const [isBasket, setIsBasket] = useState(false);
+  const [isBasket, setIsBasket] = useState(true);
 
   useEffect(() => {
-    if (baskets.length !== 0) {
-      setIsBasket(true);
+    if (baskets.length <= 0) {
+      setIsBasket(false);
     }
   }, [baskets]);
 
@@ -41,7 +41,7 @@ function Checkout() {
               />
             ))
           ) : (
-            <h1>You have nothing in your basket</h1>
+            <h1>Please add something to your basket ^.^</h1>
           )}
         </div>
       </div>

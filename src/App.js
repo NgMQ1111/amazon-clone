@@ -1,11 +1,15 @@
+import { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import { auth } from "./firebase";
+import { useStateValue } from "./store/StateProvider";
 
 import Checkout from "./Checkout/Checkout";
 import Header from "./Header/Header";
 import Home from "./Home/Home";
+import Login from "./Login/Login";
 
 function App() {
-
   const PRODUCTS = [
     {
       id: 1,
@@ -49,15 +53,41 @@ function App() {
     },
   ];
 
+  const [{}, dispath] = useStateValue()
+
+  useEffect(() => {
+    auth.onAuthStateChanged(authUser => {
+      if(authUser) {
+        dispath({
+          type: "SET_USER",
+          user: authUser
+        })
+      } else {
+        dispath({
+          type: "SET_USER",
+          user: null
+        })
+      }
+    })
+  }, [])
+
   return (
     <Router>
       <div className="App">
-        <Header />
         <Routes>
+          <Route
+            path="/login"
+            element={
+              <>
+                <Login />
+              </>
+            }
+          />
           <Route
             path="/checkout"
             element={
               <>
+                <Header />
                 <Checkout />
               </>
             }
@@ -66,7 +96,8 @@ function App() {
             path="/"
             element={
               <>
-                <Home products={PRODUCTS}/>
+                <Header />
+                <Home products={PRODUCTS} />
               </>
             }
           />

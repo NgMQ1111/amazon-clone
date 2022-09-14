@@ -6,11 +6,18 @@ import styles from "./Header.module.scss";
 import SearchTwoToneIcon from "@mui/icons-material/SearchTwoTone";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useStateValue } from "../store/StateProvider";
+import { auth } from "../firebase";
 
 const cx = classNames.bind(styles);
 
 function Header() {
-  const [{ baskets }, dispath] = useStateValue();
+  const [{ baskets, user }, dispath] = useStateValue();
+
+  const handleSignOut = () => {
+    if(user) {
+      auth.signOut()
+    }
+  }
 
   return (
     <div className={cx("wrapper")}>
@@ -31,10 +38,12 @@ function Header() {
         </div>
 
         <div className={cx("navigation")}>
-          <div className={cx("option")}>
-            <span className={cx("optionLineOne")}>Hello Guest</span>
-            <span className={cx("optionLineTwo")}>Sign In</span>
-          </div>
+          <Link to={!user && "/login"}>
+            <div onClick={handleSignOut} className={cx("option")}>
+              <span className={cx("optionLineOne")}>Hello {user ? auth.currentUser.email : "Guest"} </span>
+              <span className={cx("optionLineTwo")}>{user ? 'Sign Out' : 'Sign In'}</span>
+            </div>
+          </Link>
 
           <div className={cx("option")}>
             <span className={cx("optionLineOne")}>Returns</span>

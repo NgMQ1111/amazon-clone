@@ -1,5 +1,6 @@
 const initialState = {
   baskets: [],
+  user: null
 };
 
 const reducer = (state, action) => {
@@ -16,6 +17,13 @@ const reducer = (state, action) => {
         ...state,
         baskets: [...state.baskets],
       };
+    
+    case "SET_USER":
+      return {
+        ...state,
+        user: action.user
+      }
+
     default:
       return state;
   }
