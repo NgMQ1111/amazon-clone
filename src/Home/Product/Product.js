@@ -24,7 +24,10 @@ function Product({ id, title, price, rating, image }) {
         },
       });
     } else {
-      nagative("/login");
+      alert("Please Login to continue!")
+      setTimeout(() => {
+        nagative("/login");
+      }, 500)
     }
   };
 

@@ -15,7 +15,9 @@ function Header() {
 
   const handleSignOut = () => {
     if(user) {
-      auth.signOut()
+      setTimeout(() => {
+        auth.signOut()
+      }, 500)
     }
   }
 
