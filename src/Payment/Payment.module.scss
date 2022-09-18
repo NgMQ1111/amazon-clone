@@ -1,0 +1,28 @@
+.wrapper {
+    padding-top: 60px;
+}
+
+.container {
+    h1 {
+        text-align: center;
+        padding: 10px;
+    }
+}
+
+.section {
+    display: flex;
+    padding: 20px;
+    margin: 0 20px;
+    border: 1px solid lightgray;
+    background-color: #fff;
+}
+
+.title {
+    flex: .2;
+}
+
+.address,
+.items,
+.details {
+    flex: .8;
+}

@@ -1,9 +1,13 @@
 import classNames from "classnames/bind";
+import { useNavigate } from "react-router-dom";
+
 import styles from "./Subtotal.module.scss";
 
 const cx = classNames.bind(styles);
 
 function Subtotal({ baskets }) {
+  
+  const navigate = useNavigate()
 
   const total = baskets.reduce((result, prod) => 
     result + prod.price, 
@@ -21,7 +25,7 @@ function Subtotal({ baskets }) {
         <p> This order contains a gift</p>
       </small>
 
-      <button className={cx("checkout-btn")}>Procced to Checkout</button>
+      <button onClick={() => navigate("/payment")} className={cx("checkout-btn")}>Procced to Checkout</button>
     </div>
   );
 }

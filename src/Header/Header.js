@@ -61,7 +61,7 @@ function Header() {
             <div className={cx("optionCart")}>
               <ShoppingCartIcon className={cx("cart__icon")} />
               <div className={cx('notWrapIconCart')}>
-                <span className={cx("cart__count")}>{baskets.length}</span>
+                <span className={cx("cart__count")}>{user ? baskets.length : 0}</span>
                 <span className={cx("optionLineTwo")}>Cart</span>
               </div>
             </div>

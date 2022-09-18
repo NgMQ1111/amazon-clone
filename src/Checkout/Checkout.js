@@ -9,7 +9,7 @@ import Subtotal from "./Subtotal/Subtotal";
 const cx = classNames.bind(styles);
 
 function Checkout() {
-  const [{ baskets }, dispath] = useStateValue();
+  const [{ baskets, user }, dispath] = useStateValue();
   const [isBasket, setIsBasket] = useState(true);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ function Checkout() {
 
         <div className={cx("wrap__basketIitem")}>
           <h2 className={cx("title")}>Your shopping Basket</h2>
-          {isBasket ? (
+          {(user && isBasket) ? (
             baskets.map((basket, index) => (
               <BasketItem
                 index={index}

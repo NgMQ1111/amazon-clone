@@ -9,7 +9,7 @@ const cx = classNames.bind(styles);
 
 function Product({ id, title, price, rating, image }) {
   const [{ baskets, user }, dispath] = useStateValue();
-  const nagative = useNavigate();
+  const navigate = useNavigate();
 
   const addToBasket = () => {
     if (user) {
@@ -26,7 +26,7 @@ function Product({ id, title, price, rating, image }) {
     } else {
       alert("Please Login to continue!")
       setTimeout(() => {
-        nagative("/login");
+        navigate("/login");
       }, 500)
     }
   };
