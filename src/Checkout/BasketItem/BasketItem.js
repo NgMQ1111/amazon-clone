@@ -3,19 +3,37 @@ import styles from "./BasketItem.module.scss";
 
 import StarIcon from "@mui/icons-material/Star";
 import { useStateValue } from "../../store/StateProvider";
+import db from "../../firebase";
+import { useEffect, useState } from "react";
 
 const cx = classNames.bind(styles);
 
 function BasketItem({index, title, price, rating, image }) {
 
-  const [{baskets}, dispath] = useStateValue()
+  const [{baskets, user}, dispath] = useStateValue()
+  const [removeBasket, setRemoveBasket] = useState(baskets.length);
+
 
   const removeFromBasket = () => {
     dispath({
       type: "REMOVE_FROM_BASKET",
       item: index
     })
+
+    setRemoveBasket(removeBasket - 1)
   }
+
+  useEffect(() => {
+    if (user) {
+      //todo: Storage Firebase
+      db.collection("users").doc(user.uid).update({
+        baskets: baskets,
+      });
+
+      localStorage.setItem('baskets', JSON.stringify(baskets))
+      
+    }
+  }, [removeBasket]);
 
   return (
     <div className={cx("wrapper")}>

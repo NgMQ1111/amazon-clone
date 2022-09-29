@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
 import BasketItem from "../Checkout/BasketItem/BasketItem";
@@ -6,19 +6,19 @@ import { useStateValue } from "../store/StateProvider";
 
 import classNames from "classnames/bind";
 import styles from "./Payment.module.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "../axios";
+import { getBasketTotal } from "../store/reducer";
 
 const cx = classNames.bind(styles);
 
 function Payment() {
+
+  const navative = useNavigate()
   const [{ baskets }, dispath] = useStateValue();
 
   //todo: Calculate Price Items
-  const total = baskets.reduce((result, prod) => 
-    result + prod.price, 
-    0
-  );
-  const result = Number(total.toFixed(2))
+  const result = getBasketTotal(baskets)
 
 
   //todo: use Stripe
@@ -29,9 +29,38 @@ function Payment() {
   const [processing, setProcessing] = useState("")
   const [error, setError] = useState(null)
   const [disabled, setDisabled] = useState(true)
+  const [clientSecret, setClientSecret] = useState(true)
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    // generate the special stripe secret which allows us to charge a customer
+    const getClientSecret = async() => {
+      const response = await axios({
+        method: "post",
+        url: `/playments/create?total=${result * 100}`
+      })
+      setClientSecret(response.data.clientSecret)
+    }
+
+    getClientSecret()
+  }, [baskets])
+
+  const handleSubmit = async(e) => {
     e.preventDefault()
+
+    //! Can xem lai
+    const payload = await stripe.confirmCardPayment(clientSecret, {
+      payment_method: {
+        card: elements.getElement(CardElement)
+      }
+    }).then(({ payment_method }) => {
+
+      setSucceeded(true)
+      setError(null)
+      setProcessing(false)
+
+      navative("/order")
+
+    })
   }
 
   const handleChange = (e) => {

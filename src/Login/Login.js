@@ -1,7 +1,8 @@
 import classNames from "classnames/bind";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { auth } from "../firebase";
+import db, { auth } from "../firebase";
+import { useStateValue } from "../store/StateProvider";
 
 import styles from "./Login.module.scss";
 
@@ -9,33 +10,57 @@ const cx = classNames.bind(styles);
 
 function Login() {
   const nagative = useNavigate();
+  const [{ baskets, user }, dispath] = useStateValue();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSignIn = (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
 
     // Sign In by FireBase
-    auth
+    const playload = await auth
       .signInWithEmailAndPassword(email, password)
       .then((auth) => {
         if (auth) {
-          nagative("/");
+          setTimeout(() => {
+            nagative("/");
+          }, 500);
+
+          //todo: set Storage User
+          db.collection("users")
+            .doc(auth.user.uid)
+            .get()
+            .then((data) => {
+              dispath({
+                type: "STORAGE_USER",
+                baskets: data.data().baskets,
+              });
+              localStorage.setItem("baskets", JSON.stringify(data.data().baskets));
+            });
+
         }
       })
-      .catch((error) => alert("Incorrect account or password! Try again or create a new account."));
+      .catch((error) =>
+        alert(
+          "Incorrect account or password! Try again or create a new account."
+        )
+      );
   };
 
-  
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
 
     // Register by FireBase
-    auth
+    const playload = await auth
       .createUserWithEmailAndPassword(email, password)
       .then((auth) => {
         if (auth) {
-          alert("Successful account creation! You can Sign In now.")
+          alert("Successful account creation! You can Sign In now.");
+
+          //todo: set Storage User
+          db.collection("users").doc(auth.user.uid).set({
+            baskets: [],
+          });
         }
       })
       .catch((error) => alert(error));

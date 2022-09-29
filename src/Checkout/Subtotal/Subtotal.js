@@ -1,5 +1,6 @@
 import classNames from "classnames/bind";
 import { useNavigate } from "react-router-dom";
+import { getBasketTotal } from "../../store/reducer";
 
 import styles from "./Subtotal.module.scss";
 
@@ -8,12 +9,9 @@ const cx = classNames.bind(styles);
 function Subtotal({ baskets }) {
   
   const navigate = useNavigate()
-
-  const total = baskets.reduce((result, prod) => 
-    result + prod.price, 
-    0
-  );
-  const result = Number(total.toFixed(2))
+  
+  //todo: Calculate Total items
+  const result = getBasketTotal(baskets)
 
   return (
     <div className={cx("wrapper")}>

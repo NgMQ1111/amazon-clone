@@ -4,11 +4,14 @@ import styles from "./Product.module.scss";
 import StarIcon from "@mui/icons-material/Star";
 import { useStateValue } from "../../store/StateProvider";
 import { useNavigate } from "react-router-dom";
+import db from "../../firebase";
+import { useEffect, useState } from "react";
 
 const cx = classNames.bind(styles);
 
 function Product({ id, title, price, rating, image }) {
   const [{ baskets, user }, dispath] = useStateValue();
+  const [addBasket, setAddBasket] = useState(0);
   const navigate = useNavigate();
 
   const addToBasket = () => {
@@ -23,13 +26,27 @@ function Product({ id, title, price, rating, image }) {
           image: image,
         },
       });
+
+      setAddBasket(addBasket + 1);
     } else {
-      alert("Please Login to continue!")
+      alert("Please Login to continue!");
       setTimeout(() => {
         navigate("/login");
-      }, 500)
+      }, 500);
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      //todo: Storage Firebase
+      db.collection("users").doc(user.uid).update({
+        baskets: baskets,
+      });
+
+      //todo: Luu bo nho tam thoi
+      localStorage.setItem('baskets', JSON.stringify(baskets))
+    }
+  }, [addBasket]);
 
   return (
     <div className={cx("wrapper")}>

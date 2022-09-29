@@ -18,7 +18,7 @@ const promise = loadStripe(
 );
 
 function App() {
-  const [{}, dispath] = useStateValue();
+  const [{ baskets, user }, dispath] = useStateValue();
   const [products, setProducts] = useState([]);
   const newProducts = [];
 
@@ -41,16 +41,24 @@ function App() {
   //Set User
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
+
+      
       if (authUser) {
+        // db.collection('users').doc(authUser.uid).get(data => console.log(data.data().baskets))
+        // db.collection('users').doc(authUser.uid).get().then(data => console.log(data.data()))
+
         dispath({
           type: "SET_USER",
           user: authUser,
+          baskets: baskets,
         });
       } else {
         dispath({
           type: "SET_USER",
           user: null,
+          baskets: [],
         });
+        baskets = []
       }
     });
   }, []);
