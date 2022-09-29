@@ -1,7 +1,5 @@
 const STORAGE_BASKETS = JSON.parse(localStorage.getItem('baskets'))
 
-console.log(STORAGE_BASKETS);
-
 const initialState = {
   baskets: STORAGE_BASKETS ?? [],
   user: null,
